@@ -1,14 +1,6 @@
 package ATM;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
-import javax.swing.JFormattedTextField;
-import javax.swing.JOptionPane;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
