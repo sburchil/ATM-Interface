@@ -6,12 +6,12 @@ public enum Payment {
     CASH (0.0, 0.0, 0.0), 
     CHECK (0.0, 0.0, 0.0);
 
-    double amtDeposited, amtWithdrawn, amtTotal;
+    double amtDeposited, amtWithdrawn, balanceTotal;
 
     Payment(double amtDeposited, double amtWithdrawn, double amtTotal){
         this.amtDeposited = amtDeposited;
         this.amtWithdrawn = amtWithdrawn;
-        this.amtTotal = amtTotal;
+        this.balanceTotal = amtTotal;
     }
 
 
