@@ -36,7 +36,7 @@ class Window extends JFrame {
         l2.setForeground(Color.WHITE);
         l2.setBounds(10, 50, 100, 25);
         depositField.setBounds(25, 50, 200, 25);
-        depositField.setValue(new Double(100.0));
+        depositField.setValue(Double.valueOf(100.00));
         depositField.setForeground(Color.WHITE);
         depositField.setBackground(Color.BLACK);
 

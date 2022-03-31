@@ -20,9 +20,6 @@ import java.text.SimpleDateFormat;
 
 public class NewWindow extends JFrame implements PropertyChangeListener {
     private static JFormattedTextField principleTextField;
-    private static JFormattedTextField rateTextField;
-    private static JFormattedTextField yearsTextField;
-    private static JFormattedTextField amountTextField;
     private static JFormattedTextField amtTotal;
     private static JButton completeTransaction;
     private static ButtonGroup buttonGroup1, buttonGroup2;
@@ -57,7 +54,7 @@ public class NewWindow extends JFrame implements PropertyChangeListener {
         principleTextField.setColumns(10);
         JLabel principleLabel = new JLabel("Amount:");
         principleLabel.setLabelFor(principleTextField);
-        principleTextField.setValue(new Double(100000));
+        principleTextField.setValue(Double.valueOf(100.00));
         principleTextField.addPropertyChangeListener("value", tester);
 
         NumberFormat amountFormat = NumberFormat.getCurrencyInstance();

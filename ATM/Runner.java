@@ -1,8 +1,5 @@
 package ATM;
 
-import javax.swing.JFrame;
-import java.awt.Color;
-
 public class Runner{
     public static void main(String[] args) {
         NewWindow newWindow = new NewWindow();
