@@ -5,20 +5,25 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
-public class NewWindow extends JFrame implements PropertyChangeListener {
+public class NewWindow extends JFrame {
     private static JFormattedTextField principleTextField;
     private static JFormattedTextField amtTotal;
-    private static JButton completeTransaction;
+    private static JButton numBtn;
+    private static ArrayList<JButton> keypadArray;
     private static ButtonGroup buttonGroup1, buttonGroup2;
     private static JRadioButton creditOption, debitOption, cashOption, checkOption;
     private static JRadioButton deposit, withdraw;
     private static Payment payOption;
+    private static String keypadAmt = "";
 
+    final private static String[] keypadContent = { "7", "8", "9", "4", "5", "6", "1", "2", "3", "Clear", "0",
+            "Enter" };
 
     public static void createWindow(NewWindow tester) {
         JFrame frame = new JFrame("ATM Transactions");
@@ -32,13 +37,17 @@ public class NewWindow extends JFrame implements PropertyChangeListener {
     private static void createUI(final JFrame frame, NewWindow tester) {
         JPanel panel = new JPanel();
         JPanel panel2 = new JPanel();
-        LayoutManager layout = new GridLayout(8, 2);
+        JPanel panel3 = new JPanel();
+        LayoutManager layout = new GridLayout(6, 2);
         panel.setLayout(layout);
         panel2.setLayout(new FlowLayout());
+        panel3.setLayout(new GridLayout(4, 3));
         panel.setSize(300, 200);
         panel2.setSize(200, 100);
+        panel3.setSize(600, 500);
         panel.setBorder(BorderFactory.createTitledBorder("ATM"));
         panel2.setBorder(BorderFactory.createTitledBorder("Transaction Type"));
+        panel3.setBorder(BorderFactory.createTitledBorder("Keypad"));
 
         NumberFormat principleFormat = NumberFormat.getNumberInstance();
         principleTextField = new JFormattedTextField(principleFormat);
@@ -47,7 +56,6 @@ public class NewWindow extends JFrame implements PropertyChangeListener {
         JLabel principleLabel = new JLabel("Amount:");
         principleLabel.setLabelFor(principleTextField);
         principleTextField.setValue(Double.valueOf(100.00));
-        principleTextField.addPropertyChangeListener("value", tester);
 
         NumberFormat amountFormat = NumberFormat.getCurrencyInstance();
         amtTotal = new JFormattedTextField(amountFormat);
@@ -56,15 +64,6 @@ public class NewWindow extends JFrame implements PropertyChangeListener {
         amtTotal.setEditable(false);
         JLabel amountLabel = new JLabel("Total Balance: ");
         amountLabel.setLabelFor(amtTotal);
-
-        // NumberFormat amountFormat = NumberFormat.getCurrencyInstance();
-        // amountTextField = new JFormattedTextField(amountFormat);
-        // amountTextField.setName("Amount");
-        // amountTextField.setColumns(10);
-        // amountTextField.setEditable(false);
-        // JLabel amountLabel = new JLabel("Amount:");
-        // amountLabel.setLabelFor(amountTextField);
-        // amountTextField.setValue(new Double(110000));
 
         DateFormat dateFormat = new SimpleDateFormat("dd MMM YYYY");
         JFormattedTextField today = new JFormattedTextField(dateFormat);
@@ -96,123 +95,45 @@ public class NewWindow extends JFrame implements PropertyChangeListener {
 
         buttonGroup2.add(deposit);
         buttonGroup2.add(withdraw);
-        
-        completeTransaction = new JButton("Complete Transaction");
-        completeTransaction.addActionListener(new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String textValue = principleTextField.getText().replaceAll(",", "");
-                try {
-                    switch (buttonGroup1.getSelection().getActionCommand()) {
-                        case "Credit Card":
-                            payOption = Payment.CREDIT;
+    
+        keypadArray = new ArrayList<JButton>(12);
+        for (int i = 0; i < keypadContent.length; i++) {
+            System.out.println(keypadContent[i]);
+            numBtn = new JButton(keypadContent[i]);
+            numBtn.setPreferredSize(new Dimension(70, 50));
+            keypadArray.add(numBtn);
+        }
 
-                            if(deposit.isSelected()){
-                                payOption.amtDeposited += Double.parseDouble(textValue);
-                                payOption.balanceTotal += Double.parseDouble(textValue);
-                                amtTotal.setValue(payOption.balanceTotal);
-                                JOptionPane.showMessageDialog(null, "Total Balance is Now: " 
-                                + amtTotal.getText());
-                            }
-                            else if(withdraw.isSelected()){
-                                if(payOption.balanceTotal <= 0.0){
-                                    JOptionPane.showMessageDialog(null, "ACCOUNT BALANCE IS $0.0!\n"+
-                                    "NO MORE MONEY CAN BE WITHDRAWN!");
-                                    amtTotal.setValue(0.0);
-                                    break;
-                                }
-                                payOption.amtWithdrawn += Double.parseDouble(textValue);
-                                payOption.balanceTotal -= Double.parseDouble(textValue);
-                                amtTotal.setValue(payOption.balanceTotal);
-                                JOptionPane.showMessageDialog(null, "Total Balance is Now: " 
-                                + amtTotal.getText());
-                            }
-                            break;
-                        case "Debit Card":
-                            payOption = Payment.DEBIT;
-                            
-                            if(deposit.isSelected()){
-                                payOption.amtDeposited += Double.parseDouble(textValue);
-                                payOption.balanceTotal += Double.parseDouble(textValue);
-                                amtTotal.setValue(payOption.balanceTotal);
-                                JOptionPane.showMessageDialog(null, "Total Balance is Now: " 
-                                + amtTotal.getText());
-                            }
-                            else if(withdraw.isSelected()){
-                                if(payOption.balanceTotal <= 0.0){
-                                    JOptionPane.showMessageDialog(null, "ACCOUNT BALANCE IS $0.0!\n"+
-                                    "NO MORE MONEY CAN BE WITHDRAWN!");
-                                    amtTotal.setValue(0.0);
-                                    break;
-                                }
-                                payOption.amtWithdrawn += Double.parseDouble(textValue);
-                                payOption.balanceTotal -= Double.parseDouble(textValue);
-                                amtTotal.setValue(payOption.balanceTotal);
-                                JOptionPane.showMessageDialog(null, "Total Balance is Now: " 
-                                + amtTotal.getText());
-                            }
-                            break;
-                        case "Cash":
-                            payOption = Payment.CASH;
-                            
-                            if(deposit.isSelected()){
-                                payOption.amtDeposited += Double.parseDouble(textValue);
-                                payOption.balanceTotal += Double.parseDouble(textValue);
-                                if(payOption.balanceTotal < 0.0){
-                                    JOptionPane.showMessageDialog(null, "ACCOUNT BALANCE IS $0.0!\n"+
-                                    "NO MORE MONEY CAN BE WITHDRAWN!");
-                                    amtTotal.setValue(0.0);
-                                }
-                                amtTotal.setValue(payOption.balanceTotal);
-                                JOptionPane.showMessageDialog(null, "Total Balance is Now: " 
-                                + amtTotal.getText());
-                            }
-                            else if(withdraw.isSelected()){
-                                if(payOption.balanceTotal <= 0.0){
-                                    JOptionPane.showMessageDialog(null, "ACCOUNT BALANCE IS $0.0!\n"+
-                                    "NO MORE MONEY CAN BE WITHDRAWN!");
-                                    amtTotal.setValue(0.0);
-                                    break;
-                                }
-                                payOption.amtWithdrawn += Double.parseDouble(textValue);
-                                payOption.balanceTotal -= Double.parseDouble(textValue);
-                                amtTotal.setValue(payOption.balanceTotal);
-                                JOptionPane.showMessageDialog(null, "Total Balance is Now: " 
-                                + amtTotal.getText());
-                            }
-                            break;
-                        case "Check":
-                            payOption = Payment.CHECK;
-                            
-                            if(deposit.isSelected()){
-                                payOption.amtDeposited += Double.parseDouble(textValue);
-                                payOption.balanceTotal += Double.parseDouble(textValue);
-                                amtTotal.setValue(payOption.balanceTotal);
-                                JOptionPane.showMessageDialog(null, "Total Balance is Now: " 
-                                + amtTotal.getText());
-                            }
-                            else if(withdraw.isSelected()){
-                                if(payOption.balanceTotal <= 0.0){
-                                    JOptionPane.showMessageDialog(null, "ACCOUNT BALANCE IS $0.0!\n"+
-                                    "NO MORE MONEY CAN BE WITHDRAWN!");
-                                    amtTotal.setValue(0.0);
-                                    break;
-                                }
-                                payOption.amtWithdrawn += Double.parseDouble(textValue);
-                                payOption.balanceTotal -= Double.parseDouble(textValue);
-                                amtTotal.setValue(payOption.balanceTotal);
-                                JOptionPane.showMessageDialog(null, "Total Balance is Now: " 
-                                + amtTotal.getText());
-                            }
-                            break;
-                    }
-                } catch (NullPointerException err) {
-                    System.err.println("caught null");
+        for (int n = 0; n < keypadArray.size(); n++) {
+            
+            final Integer innerN = new Integer(n);
+            keypadArray.get(n).addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println(e.getActionCommand());
+
+                        if (keypadArray.get(innerN).getText().equals("Clear")){
+                            principleTextField.setText("0.00");
+                            keypadAmt = "";
+                        }
+                        else if (keypadArray.get(innerN).getText().equals("Enter")){
+                            // JOptionPane.showMessageDialog(null, "You pressed enter, doesn't do anything rn.");
+                            enterPressed();
+                        }
+                        else{
+                            keypadAmt = keypadAmt + keypadArray.get(innerN).getText();
+                            principleTextField.setText(keypadAmt);
+                        }
+
+                    
+
+
                 }
-
-            }
-        });
+            });
+            panel3.add(keypadArray.get(n));
+        }
 
         panel.add(principleLabel);
         panel.add(principleTextField);
@@ -220,40 +141,149 @@ public class NewWindow extends JFrame implements PropertyChangeListener {
         panel.add(amtTotal);
         panel.add(todayLabel);
         panel.add(today);
-        panel.add(completeTransaction);
-        panel.add(new JLabel());
         panel.add(creditOption);
         panel.add(debitOption);
         panel.add(cashOption);
-        panel.add(checkOption); 
+        panel.add(checkOption);
         panel2.add(new JLabel("Would you like to withdraw or deposit?"));
         panel2.add(deposit);
         panel2.add(withdraw);
         // panel.updateUI();
-        
+
         JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new FlowLayout());
         mainPanel.add(panel);
-        mainPanel.add(panel2);
+        mainPanel.add(panel3);
+        mainPanel.add(panel2, BorderLayout.CENTER);
 
         frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        // TODO Auto-generated method stub
-        
+    private static void enterPressed(){
+        String textValue = principleTextField.getText().replaceAll(",", "");
+        try {
+            switch (buttonGroup1.getSelection().getActionCommand()) {
+                case "Credit Card":
+                    payOption = Payment.CREDIT;
+
+                    if (deposit.isSelected()) {
+                        payOption.amtDeposited += Double.parseDouble(textValue);
+                        payOption.balanceTotal += Double.parseDouble(textValue);
+                        amtTotal.setValue(payOption.balanceTotal);
+                        JOptionPane.showMessageDialog(null, "Total Balance is Now: "
+                                + amtTotal.getText());
+                    } else if (withdraw.isSelected()) {
+                        if(Double.parseDouble(textValue) > payOption.balanceTotal){
+                            JOptionPane.showMessageDialog(null, "CURRENT BALANCE IS $" + payOption.balanceTotal +
+                             "\nA WITHDRAWL OF $" + Double.parseDouble(textValue) + " WOULD RESULT IN A NEGATIVE BALANCE!");
+                             break;
+                        }
+                        else if (payOption.balanceTotal <= 0.0) {
+                            JOptionPane.showMessageDialog(null, "ACCOUNT BALANCE IS $0.0!\n" +
+                                    "NO MORE MONEY CAN BE WITHDRAWN!");
+                            amtTotal.setValue(0.0);
+                            break;
+                        }
+                        payOption.amtWithdrawn += Double.parseDouble(textValue);
+                        payOption.balanceTotal -= Double.parseDouble(textValue);
+                        amtTotal.setValue(payOption.balanceTotal);
+                        JOptionPane.showMessageDialog(null, "Total Balance is Now: "
+                                + amtTotal.getText());
+                    }
+                    break;
+                case "Debit Card":
+                    payOption = Payment.DEBIT;
+
+                    if (deposit.isSelected()) {
+                        payOption.amtDeposited += Double.parseDouble(textValue);
+                        payOption.balanceTotal += Double.parseDouble(textValue);
+                        amtTotal.setValue(payOption.balanceTotal);
+                        JOptionPane.showMessageDialog(null, "Total Balance is Now: "
+                                + amtTotal.getText());
+                    } else if (withdraw.isSelected()) {
+                        if(Double.parseDouble(textValue) > payOption.balanceTotal){
+                            JOptionPane.showMessageDialog(null, "CURRENT BALANCE IS $" + payOption.balanceTotal +
+                             "\nA WITHDRAWL OF $" + Double.parseDouble(textValue) + " WOULD RESULT IN A NEGATIVE BALANCE!");
+                             break;
+                        }
+                        else if (payOption.balanceTotal <= 0.0) {
+                            JOptionPane.showMessageDialog(null, "ACCOUNT BALANCE IS $0.0!\n" +
+                                    "NO MORE MONEY CAN BE WITHDRAWN!");
+                            amtTotal.setValue(0.0);
+                            break;
+                        }
+                        payOption.amtWithdrawn += Double.parseDouble(textValue);
+                        payOption.balanceTotal -= Double.parseDouble(textValue);
+                        amtTotal.setValue(payOption.balanceTotal);
+                        JOptionPane.showMessageDialog(null, "Total Balance is Now: "
+                                + amtTotal.getText());
+                    }
+                    break;
+                case "Cash":
+                    payOption = Payment.CASH;
+
+                    if (deposit.isSelected()) {
+                        payOption.amtDeposited += Double.parseDouble(textValue);
+                        payOption.balanceTotal += Double.parseDouble(textValue);
+                        if (payOption.balanceTotal < 0.0) {
+                            JOptionPane.showMessageDialog(null, "ACCOUNT BALANCE IS $0.0!\n" +
+                                    "NO MORE MONEY CAN BE WITHDRAWN!");
+                            amtTotal.setValue(0.0);
+                        }
+                        amtTotal.setValue(payOption.balanceTotal);
+                        JOptionPane.showMessageDialog(null, "Total Balance is Now: "
+                                + amtTotal.getText());
+                    } else if (withdraw.isSelected()) {
+                        if(Double.parseDouble(textValue) > payOption.balanceTotal){
+                            JOptionPane.showMessageDialog(null, "CURRENT BALANCE IS $" + payOption.balanceTotal +
+                             "\nA WITHDRAWL OF $" + Double.parseDouble(textValue) + " WOULD RESULT IN A NEGATIVE BALANCE!");
+                             break;
+                        }
+                        else if (payOption.balanceTotal <= 0.0) {
+                            JOptionPane.showMessageDialog(null, "ACCOUNT BALANCE IS $0.0!\n" +
+                                    "NO MORE MONEY CAN BE WITHDRAWN!");
+                            amtTotal.setValue(0.0);
+                            break;
+                        }
+                        payOption.amtWithdrawn += Double.parseDouble(textValue);
+                        payOption.balanceTotal -= Double.parseDouble(textValue);
+                        amtTotal.setValue(payOption.balanceTotal);
+                        JOptionPane.showMessageDialog(null, "Total Balance is Now: "
+                                + amtTotal.getText());
+                    }
+                    break;
+                case "Check":
+                    payOption = Payment.CHECK;
+
+                    if (deposit.isSelected()) {
+                        payOption.amtDeposited += Double.parseDouble(textValue);
+                        payOption.balanceTotal += Double.parseDouble(textValue);
+                        amtTotal.setValue(payOption.balanceTotal);
+                        JOptionPane.showMessageDialog(null, "Total Balance is Now: "
+                                + amtTotal.getText());
+                    } else if (withdraw.isSelected()) {
+                        if(Double.parseDouble(textValue) > payOption.balanceTotal){
+                            JOptionPane.showMessageDialog(null, "CURRENT BALANCE IS $" + payOption.balanceTotal +
+                             "\nA WITHDRAWL OF $" + Double.parseDouble(textValue) + " WOULD RESULT IN A NEGATIVE BALANCE!");
+                             break;
+                        }
+                        else if (payOption.balanceTotal <= 0.0) {
+                            JOptionPane.showMessageDialog(null, "ACCOUNT BALANCE IS $0.0!\n" +
+                                    "NO MORE MONEY CAN BE WITHDRAWN!");
+                            amtTotal.setValue(0.0);
+                            break;
+                        }
+                        payOption.amtWithdrawn += Double.parseDouble(textValue);
+                        payOption.balanceTotal -= Double.parseDouble(textValue);
+                        amtTotal.setValue(payOption.balanceTotal);
+                        JOptionPane.showMessageDialog(null, "Total Balance is Now: "
+                                + amtTotal.getText());
+                    }
+                    break;
+            }
+        } catch (NullPointerException err) {
+            System.err.println("caught null");
+        }
     }
-
-    // @Override
-    // public void propertyChange(PropertyChangeEvent evt) {
-
-    //     principle = ((Number) principleTextField.getValue()).doubleValue();
-    //     // rate = ((Number) rateTextField.getValue()).doubleValue() * 100;
-    //     // years = ((Number) yearsTextField.getValue()).doubleValue();
-
-    //     amount += principle;
-    //     System.out.println(amount);
-    //     amtTotal.setValue(new Double(amount));
-    // }
 
 }
