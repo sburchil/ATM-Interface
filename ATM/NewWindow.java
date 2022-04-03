@@ -110,7 +110,6 @@ public class NewWindow extends JFrame {
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println(e.getActionCommand());
 
                         if (keypadArray.get(innerN).getText().equals("Clear")){
                             principleTextField.setText("0.00");
