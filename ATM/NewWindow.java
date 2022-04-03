@@ -3,8 +3,6 @@ package ATM;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.text.DateFormat;
@@ -29,7 +27,7 @@ public class NewWindow extends JFrame {
         JFrame frame = new JFrame("ATM Transactions");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         createUI(frame, tester);
-        frame.setSize(500, 400);
+        frame.setSize(700, 400);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
