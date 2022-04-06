@@ -2,8 +2,11 @@ package ATM;
 
 public class Runner{
     public static void main(String[] args) {
-        NewWindow newWindow = new NewWindow();
-        NewWindow.createWindow(newWindow); 
+        Window.createWindow();
+
+        if(Window.isOpen){
+            NewWindow.createWindow(); 
+        }
         
         // Window jFrame = new Window();
 

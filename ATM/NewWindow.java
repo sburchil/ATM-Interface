@@ -23,16 +23,16 @@ public class NewWindow extends JFrame {
     final private static String[] keypadContent = { "7", "8", "9", "4", "5", "6", "1", "2", "3", "Clear", "0",
             "Enter" };
 
-    public static void createWindow(NewWindow tester) {
+    public static void createWindow() {
         JFrame frame = new JFrame("ATM Transactions");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        createUI(frame, tester);
+        createUI(frame);
         frame.setSize(700, 400);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    private static void createUI(final JFrame frame, NewWindow tester) {
+    private static void createUI(final JFrame frame) {
         JPanel panel = new JPanel();
         JPanel panel2 = new JPanel();
         JPanel panel3 = new JPanel();
