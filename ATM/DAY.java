@@ -9,12 +9,10 @@ enum DAY {
     SATURDAY (false),
     SUNDAY (false);
 
-    boolean open;
+    final boolean open;
     DAY(boolean open){
         this.open = open;
     }
-
-    protected boolean open(){return open;}
 
 
 }
