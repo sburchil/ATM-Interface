@@ -3,10 +3,6 @@ package ATM;
 public class Runner{
     public static void main(String[] args) {
         Window.createWindow();
-
-        if(Window.isOpen){
-            NewWindow.createWindow(); 
-        }
         
         // Window jFrame = new Window();
 

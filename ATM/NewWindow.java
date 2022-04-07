@@ -32,7 +32,7 @@ public class NewWindow extends JFrame {
         frame.setVisible(true);
     }
 
-    private static void createUI(final JFrame frame) {
+    private static void createUI(JFrame frame) {
         JPanel panel = new JPanel();
         JPanel panel2 = new JPanel();
         JPanel panel3 = new JPanel();
