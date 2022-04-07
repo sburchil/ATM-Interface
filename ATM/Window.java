@@ -3,6 +3,7 @@ package ATM;
 import javax.swing.*;
 import java.awt.*;
 
+
 class Window extends JFrame {
 
     private static ButtonGroup bg = new ButtonGroup();
@@ -16,7 +17,7 @@ class Window extends JFrame {
 
     protected static void createWindow() {
         JFrame frame = new JFrame("What Day is It?");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         createUI(frame);
         frame.setSize(400, 250);
         frame.setLayout(new FlowLayout());
@@ -88,8 +89,8 @@ class Window extends JFrame {
                 JOptionPane.showMessageDialog(err, "It is Currently " + 
                     bg.getSelection().getActionCommand() + "!\n" 
                     + "The Bank is Open!\nYou can proceed to transactions.");
-                    frame.setVisible(false);
-                NewWindow.createWindow(); 
+                    frame.dispose();
+                    NewWindow.createWindow(); 
             }
             else{
                 JOptionPane.showMessageDialog(err, "The Bank is Not Open On " + 
